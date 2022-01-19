@@ -1,9 +1,10 @@
+#!/usr/bin/python
+
 print("Booting...")
 
 import os
 import meshctlwrapper
 
-# test.connectNetwork()
 
 ### FUNCTIONS ###
 
