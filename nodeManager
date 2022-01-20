@@ -49,7 +49,7 @@ while choice != 'q':
         # het is laat maar het is af
         print("state is: " + str(meshctlwrapper.getget(input("which node to query? "))))
     elif choice == '4':
-        meshctlwrapper.startDiscoverUnprovisioned(input("discover for how long (seconds)?"))
+        print(meshctlwrapper.startDiscoverUnprovisioned(input("discover for how long (seconds)?")))
     elif choice == 'q':
         print("\nExiting application")
         exit()
