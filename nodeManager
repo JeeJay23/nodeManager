@@ -5,7 +5,6 @@ print("Booting...")
 import os
 import meshctlwrapper
 
-
 ### FUNCTIONS ###
 
 def display_title_bar():

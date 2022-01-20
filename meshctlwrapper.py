@@ -31,15 +31,10 @@ def connectNetwork():
     time.sleep(9)
 
 def getAllNodes():
+    msg = ""
     with open("/home/pi/.config/meshctl/prov_db.json", 'r') as file:
         data = json.load(file)
-        
-        for i, p in enumerate(data['nodes']):
-            print ('node: ' + str(i))
-            for e in p['configuration']['elements']:
-                if "models" in e:
-                    print(e)
-            print ("----------------------------------------------------------\n")
+        return data
 
 def toggleLight(target, onoff):
     global process
@@ -60,7 +55,6 @@ def toggleLight(target, onoff):
                 return -1
         except:
             break
-
     return 1
 
 def getget(target):
@@ -81,6 +75,7 @@ def getget(target):
                 return aresponse[-3]
         except:
             print('didnt get wat we need')
+            return -1
             break
 
     return 1
