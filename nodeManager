@@ -21,6 +21,7 @@ def get_user_choice():
     print("\n[1] Show nodes")
     print("[2] Set led ")
     print("[3] get led state ")
+    print("[4] discover unprovisioned devices")
     print("[q] Quit.")
     
     return input("Choose option. \n")
@@ -47,6 +48,8 @@ while choice != 'q':
     elif choice == '3':
         # het is laat maar het is af
         print("state is: " + str(meshctlwrapper.getget(input("which node to query? "))))
+    elif choice == '4':
+        meshctlwrapper.startDiscoverUnprovisioned(input("discover for how long (seconds)?"))
     elif choice == 'q':
         print("\nExiting application")
         exit()

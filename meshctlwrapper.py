@@ -31,15 +31,17 @@ def connectNetwork():
     time.sleep(9)
 
 def getAllNodes():
+    msg = ""
     with open("/home/pi/.config/meshctl/prov_db.json", 'r') as file:
         data = json.load(file)
         
         for i, p in enumerate(data['nodes']):
-            print ('node: ' + str(i))
+            msg += ('node: ' + str(i))
             for e in p['configuration']['elements']:
                 if "models" in e:
-                    print(e)
-            print ("----------------------------------------------------------\n")
+                    msg += e
+            msg += "----------------------------------------------------------\n"
+    return msg
 
 def toggleLight(target, onoff):
     global process
@@ -91,6 +93,21 @@ def getResponse(p):
         try:
             print(p.stdout.readline())
         except:
+            break
+
+def startDiscoverUnprovisioned(seconds):
+    global process 
+    #Start discovering with time specified
+    process.stdin.write(("discover-unprovisioned on " + seconds).encode())
+    time.sleep(0.5)
+    while 1:
+        try:
+            response = process.stdout.readline().decode('utf8')
+            if ('Device UUID: ' in response):
+                aresponse = process.stdout.readline().decode('utf8')
+                return aresponse
+        except:
+            print('No unprovioned devices found.')
             break
 
 init()
