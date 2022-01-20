@@ -33,8 +33,14 @@ def connectNetwork():
 def getAllNodes():
     msg = ""
     with open("/home/pi/.config/meshctl/prov_db.json", 'r') as file:
+        msg = ""
         data = json.load(file)
-        return data
+        for i, p in enumerate(data['nodes']):
+            for e in p['configuration']['elements']:
+                if "models" in e:
+                    msg += str(e) + "\n"
+                    # msg += e['unicastAddress'] + "\n"
+        return msg
 
 def toggleLight(target, onoff):
     global process

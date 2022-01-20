@@ -11,6 +11,19 @@ def test():
         "get node onoff information" : "/get/<string:target>"
     }
 
+@app.route("/provision/scan")
+def provisionScan():
+    return {
+        "Not implemented yet" : 0,
+        "Will return list of unprovisioned nodes" : 0
+    }
+
+@app.route("/provision/<string:target>")
+def provisionTarget(target):
+    return {
+        "Not implemented yet" : 0
+    }
+
 @app.route("/get/all")
 def getAll():
     return mw.getAllNodes()
