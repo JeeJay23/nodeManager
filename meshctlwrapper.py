@@ -94,7 +94,7 @@ def getResponse(p):
         except:
             break
 
-def startDiscoverUnprovisioned():
+def discoverUnprovisioned():
     global process 
     process.stdin.write("back\n".encode())
     time.sleep(0.5)
@@ -102,33 +102,50 @@ def startDiscoverUnprovisioned():
     print("Discovering... Please wait 10 seconds.")
     time.sleep(10)
     UUIDs = []
-    while 1:
+    while (process.stdout.readable() != type(None)):
         try:
             response = process.stdout.readline().decode('utf8')
             if ('Device UUID: ' in response):
                 index = response.find("Device UUID: ")
                 UUIDs.append(response[index+13:])
-                return UUIDs[0]
         except:
-            print('No unprovioned devices found.')
+            if not UUIDs:
+                print('No unprovioned devices found.')
             break
+    return UUIDs
 
+# returns button presses
 def provisionNode(UUID):
     global process 
     process.stdin.write("back\n".encode())
     time.sleep(0.5)
     process.stdin.write(("provision " + str(UUID) + "\n").encode())
-    print("Provisioning device... Please wait 10 seconds.")
+    print("Provisioning device... Please wait until lights flicker.")
     time.sleep(10)
     while 1:
         try:
             response = process.stdout.readline().decode('utf8')
             if ('Agent String: Push' in response):
                 index = response.find("Push")
+                # print amount of times to push button
                 print("Push button " + response[index+5:index+6] + "x times to provision.")
-                return 1
+                return response[index+5:index+6]
         except:
-            print('Provisioning failed')
-            break
+            print('Provisioning failed. Please try again.')
+            return -1
+
+# returns unicast number
+def checkProvisionSucces():
+    while 1:
+        try:
+            response = process.stdout.readline().decode('utf8')
+            if ('Provision success. Assigned Primary Unicast' in response):
+                index = response.find("Unicast")
+                # unicast number is 4 characters long
+                print("Provision success. Assigned Primary Unicast " + response[index+8:index+12])
+                return response[index+8:index+12]
+        except:
+            print('Provisioning failed. Please try again.')
+            return -1
     
 init()
