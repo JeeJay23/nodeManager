@@ -52,9 +52,9 @@ while choice != 'q':
     elif choice == '4':
         print(meshctlwrapper.discoverUnprovisioned())
     elif choice == '5':
-        print("Press button " + str(meshctlwrapper.provisionNode(input("Enter UUID: ")) + "x times to provision."))
-        while input("Finishing pressing? Y/N: ") != "Y":
-            print(meshctlwrapper.checkProvisionSucces())
+        print(meshctlwrapper.provisionNode(input("Enter UUID: ")))
+        #while input("Finishing pressing? Y/N: ") != "Y":
+        #    print(meshctlwrapper.checkProvisionSucces())
     elif choice == 'q':
         print("\nExiting application")
         exit()
