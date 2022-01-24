@@ -2,6 +2,7 @@ from flask import Flask
 import meshctlwrapper as mw
 
 app = Flask(__name__)
+meshCtl = mw.meshCtlWrapper()
 
 @app.route("/")
 def test():
@@ -26,11 +27,11 @@ def provisionTarget(target):
 
 @app.route("/get/all")
 def getAll():
-    return mw.getAllNodes()
+    return meshCtl.getAllNodes()
 
 @app.route("/get/<string:target>")
 def getTargetInformation(target):
-    targetState = mw.getget(target)
+    targetState = meshCtl.getget(target)
     return {
         "target" : target,
         "target onoff" : targetState
@@ -38,7 +39,7 @@ def getTargetInformation(target):
 
 @app.route("/onoff=<string:target>&<string:onoff>")
 def turnNodeOn(target, onoff):
-    success = mw.toggleLight(target, onoff)
+    success = meshCtl.toggleLight(target, onoff)
     return { 
         "target" : target,
         "onoff" : onoff,
