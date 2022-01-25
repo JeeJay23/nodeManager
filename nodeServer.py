@@ -31,7 +31,10 @@ def getAll():
 
 @app.route("/get/<string:target>")
 def getTargetInformation(target):
+    global targetState 
     targetState = meshCtl.getget(target)
+    while (targetState == -1):
+        targetState = meshCtl.getget(target)
     return {
         "target" : target,
         "target onoff" : targetState
