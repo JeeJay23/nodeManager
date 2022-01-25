@@ -22,7 +22,7 @@ class meshCtlWrapper:
 
     def connectNetwork(self):
         self.process.stdin.write("back\n".encode())
-        time.sleep(.5)
+        time.sleep(0.5)
         self.process.stdin.write("power off\n".encode())
         time.sleep(0.5)
         self.process.stdin.write("power on\n".encode())
@@ -101,8 +101,8 @@ class meshCtlWrapper:
         self.process.stdin.write("back\n".encode())
         time.sleep(0.5)
         self.process.stdin.write("discover-unprovisioned on\n".encode())
-        print("Discovering... Please wait 10 seconds.")
-        time.sleep(10)
+        print("Discovering...")
+        time.sleep(5)
         UUIDs = []
         while (self.process.stdout.readable() != type(None)):
             try:
@@ -118,12 +118,10 @@ class meshCtlWrapper:
 
     # returns button presses
     def provisionNode(self, UUID):
-        self.process.stdin.write("back\n".encode())
-        time.sleep(0.5)
         self.process.stdin.write(("provision " + str(UUID) + "\n").encode())
         print("Provisioning device... Please wait until lights flicker.")
-        time.sleep(5)
-        while 1:
+        time.sleep(15)
+        while (self.process.stdout.readable() != type(None)):
             try:
                 response = self.process.stdout.readline().decode('utf8')
                 if ('Agent String: Push' in response):
@@ -131,9 +129,11 @@ class meshCtlWrapper:
                     # print amount of times to push button
                     print("Push button " + response[index+5:index+6] + "x times to provision.")
                     return response[index+5:index+6]
+                if ('Failed to start provisioning' in response):
+                    print('Provisioning failed. Discover and try again.')
+                    self.process.stdin.write("some garbage to get out of fake provisioning state".encode())
+                    return -2
             except:
-                print('Provisioning failed. Resetting. Please wait 10 seconds and try again.')
-                self.connectNetwork()
                 return -1
 
     # returns unicast number
@@ -148,4 +148,30 @@ class meshCtlWrapper:
                     return response[index+8:index+12]
             except:
                 print('Provisioning failed. Please try again.')
+                return -1
+    
+    # add appkey
+    def addAppKey(self, unicastNumber):
+        self.process.stdin.write("back\n".encode())
+        time.sleep(0.5)
+        self.process.stdin.write("menu config\n".encode())
+        time.sleep(0.5)
+        self.process.stdin.write(("target " + str(unicastNumber) + "\n").encode())
+        time.sleep(0.5)
+        self.process.stdin.write(("appkey-add 1\n").encode())
+        time.sleep(0.5)
+        self.process.stdin.write(("bind 0 1 1000\n").encode())
+        time.sleep(0.5)
+        while 1:
+            try:
+                response = self.process.stdout.readline().decode('utf8')
+                if ('Model App status Success' in response):
+                    print("AppKey and bind succes")
+                    return 1
+                if ('Failed to AcquireWrite' in response):
+                    print("Failed to AcquireWrite, restarting network... try again after")
+                    self.connectNetwork()
+                    return -2
+            except:
+                print('Garbage')
                 return -1
