@@ -61,6 +61,7 @@ class meshCtlWrapper:
                 response = self.process.stdout.readline().decode('utf8')
                 if (response == 'Failed to AcquireWrite\n'):
                     print("failed to write, restarting network...")
+                    self.connectNetwork()
                     return -1
             except:
                 break
@@ -81,10 +82,13 @@ class meshCtlWrapper:
                 if ('On Off Model Message received' in response):
                     aresponse = self.process.stdout.readline().decode('utf8')
                     return aresponse[-3]
+                if ('Failed to AcquireWrite' in response):
+                    print("failed to write, restarting network...")
+                    self.connectNetwork()
+                    return -1
             except:
                 print('didnt get wat we need')
-                return -1
-                break
+                return -2
 
         return 1
 
