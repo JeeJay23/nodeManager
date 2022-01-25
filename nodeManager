@@ -3,8 +3,9 @@
 print("Booting...")
 
 import os
-import meshctlwrapper
+import meshctlwrapper as mw
 
+meshCtl = mw.meshCtlWrapper()
 
 ### FUNCTIONS ###
 
@@ -23,16 +24,18 @@ def get_user_choice():
     print("[3] get led state ")
     print("[4] Discover unprovisioned devices")
     print("[5] Provision device with UUID")
+    print("[6] Check unicast number")
+    print("[7] Add appkey")
     print("[q] Quit.")
     
     return input("Choose option. \n")
 
 def showNodes():
-    print(meshctlwrapper.getAllNodes())
+    print(meshCtl.getAllNodes())
     return 0
 
 def setLight():
-    meshctlwrapper.toggleLight(input("which element? "), input("on(1) or off(0)? "))
+    meshCtl.toggleLight(input("which element? "), input("on(1) or off(0)? "))
 
 ### MAIN PROGRAM ###
 choice = ''
@@ -48,13 +51,15 @@ while choice != 'q':
         setLight()
     elif choice == '3':
         # het is laat maar het is af
-        print("state is: " + str(meshctlwrapper.getget(input("which node to query? "))))
+        print("state is: " + str(meshCtl.getget(input("which node to query? "))))
     elif choice == '4':
-        print(meshctlwrapper.discoverUnprovisioned())
+        print(meshCtl.discoverUnprovisioned())
     elif choice == '5':
-        print(meshctlwrapper.provisionNode(input("Enter UUID: ")))
-        #while input("Finishing pressing? Y/N: ") != "Y":
-        #    print(meshctlwrapper.checkProvisionSucces())
+        print(meshCtl.provisionNode(input("Enter UUID: ")))
+    elif choice == '6':
+        print(meshCtl.checkProvisionSucces())
+    elif choice == '7':
+        print(meshCtl.addAppKey(input("Enter Unicast Number: ")))
     elif choice == 'q':
         print("\nExiting application")
         exit()
