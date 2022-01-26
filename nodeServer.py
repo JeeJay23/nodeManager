@@ -14,15 +14,16 @@ def test():
 
 @app.route("/provision/scan")
 def provisionScan():
+    UUIDs = meshCtl.discoverUnprovisioned()
     return {
-        "Not implemented yet" : 0,
-        "Will return list of unprovisioned nodes" : 0
+        "UUIDs" : UUIDs
     }
 
 @app.route("/provision/<string:target>")
 def provisionTarget(target):
+    buttonPresses = meshCtl.provisionNode(target)
     return {
-        "Not implemented yet" : 0
+        "Button presses to provision" : buttonPresses 
     }
 
 @app.route("/get/all")
