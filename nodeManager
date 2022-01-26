@@ -22,12 +22,16 @@ def get_user_choice():
     print("\n[1] Show nodes")
     print("[2] Set led ")
     print("[3] get led state ")
+    print("[4] Discover unprovisioned devices")
+    print("[5] Provision device with UUID")
+    print("[6] Check unicast number")
+    print("[7] Add appkey")
     print("[q] Quit.")
     
     return input("Choose option. \n")
 
 def showNodes():
-    meshCtl.getAllNodes()
+    print(meshCtl.getAllNodes())
     return 0
 
 def setLight():
@@ -48,6 +52,14 @@ while choice != 'q':
     elif choice == '3':
         # het is laat maar het is af
         print("state is: " + str(meshCtl.getget(input("which node to query? "))))
+    elif choice == '4':
+        print(meshCtl.discoverUnprovisioned())
+    elif choice == '5':
+        print(meshCtl.provisionNode(input("Enter UUID: ")))
+    elif choice == '6':
+        print(meshCtl.checkProvisionSucces())
+    elif choice == '7':
+        print(meshCtl.addAppKey(input("Enter Unicast Number: ")))
     elif choice == 'q':
         print("\nExiting application")
         exit()
