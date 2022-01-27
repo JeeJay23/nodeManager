@@ -26,6 +26,14 @@ def provisionTarget(target):
         "Button presses to provision" : buttonPresses 
     }
 
+@app.route("/provision/getresult")
+def getResult():
+    unicastAddr = meshCtl.checkProvisionSucces()
+    result = meshCtl.addAppKey(unicastAddr)
+    return {
+        "result" : result
+    }
+
 @app.route("/get/all")
 def getAll():
     return meshCtl.getAllNodes()
